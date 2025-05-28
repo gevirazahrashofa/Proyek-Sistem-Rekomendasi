@@ -19,9 +19,9 @@ E-commerce dan platform review teknologi membutuhkan sistem rekomendasi yang efe
 
 ### Referensi
 
-+ Ricci, F., Rokach, L., & Shapira, B. (2015). Recommender Systems Handbook. Springer.
++ Ricci, F., Rokach, L., & Shapira, B. (2015). Recommender Systems Handbook. Springer. https://www.researchgate.net/publication/227268858_Recommender_Systems_Handbook
 + Koren, Y., Bell, R., & Volinsky, C. (2009). Matrix factorization techniques for recommender systems. Computer, 42(8), 30-37.
-+ Adomavicius, G., & Tuzhilin, A. (2005). Toward the next generation of recommender systems. IEEE Transactions on Knowledge and Data Engineering, 17(6), 734-749.
+https://ieeexplore.ieee.org/document/5197422
 
 ## Business Understanding
 
@@ -378,13 +378,15 @@ Dataset ini optimal untuk sistem rekomendasi skala kecil hingga menengah dengan 
 
 Menggunakan TF-IDF Vectorization dan Cosine Similarity untuk menghitung kemiripan antar smartphone berdasarkan content profile yang telah dibuat.
 
+![image](https://github.com/user-attachments/assets/fff837f2-e5b6-4477-ab02-a6b912d05174)
+
+Content-based similarity matrix sudah terbentuk dengan 33 smartphone dan matriks similarity berdimensi (33, 33) yang sesuai.
+
 + Contoh Top-5 Recommendations
 
-Untuk smartphone Samsung Galaxy S21 (ID: 1):
+![image](https://github.com/user-attachments/assets/be8ecce6-621f-4b9c-a1cf-e45d93044d2c)
 
-![image](https://github.com/user-attachments/assets/91686502-92d1-4a3d-afc8-bff2a198ffa5)
-
-Content-based filtering berhasil memberikan rekomendasi smartphone dengan spesifikasi serupa, terutama dari brand yang sama dan operating system yang sama.
+Rekomendasi menunjukkan bahwa smartphone dengan fitur dan merek serupa (Motorola Moto G series) memiliki kesamaan konten sangat tinggi, sementara perangkat dari merek lain seperti Samsung meskipun masih Android, memiliki kesamaan yang jauh lebih rendah.
 
 2. Collaborative Filtering
 
@@ -392,11 +394,9 @@ Menggunakan Neural Collaborative Filtering dengan arsitektur deep learning untuk
 
 + Contoh Top-5 Recommendations
 
-Untuk User ID 1 dengan histori rating tinggi pada smartphone flagship:
+![image](https://github.com/user-attachments/assets/f1cacd85-2ccc-4e58-b1db-724d8f54335c)
 
-![image](https://github.com/user-attachments/assets/67ffa1e3-cb55-4534-817c-9cd6246d05c2)
-
-Collaborative filtering berhasil menangkap preferensi pengguna terhadap smartphone premium dan memberikan rekomendasi yang beragam dari berbagai brand.
+User ID 0 menunjukkan preferensi kuat terhadap Samsung Galaxy S22 (rating 9), yang dapat digunakan sebagai acuan utama dalam merekomendasikan smartphone sejenis dengan performa tinggi dan sistem operasi Android.
 
 ### Perbandingan Kedua Pendeketan
 
@@ -433,79 +433,89 @@ Collaborative filtering berhasil menangkap preferensi pengguna terhadap smartpho
 
 ## Evaluation
 
-Metrik Evaluasi yang Digunakan
+###Metrik Evaluasi yang Digunakan
 
-1. Root Mean Square Error (RMSE) - Collaborative Filtering
+1. Root Mean Squared Error (RMSE) - Collaborative Filtering
 
-Cara Kerja: RMSE mengukur rata-rata kesalahan kuadrat antara prediksi dan nilai aktual. Semakin kecil nilai RMSE, semakin akurat prediksi model. Dalam konteks sistem rekomendasi, RMSE < 1.0 dianggap baik untuk skala rating 1-5.
+Formula:
+
+`RMSE = √(Σ(yi - ŷi)² / n)`
+
+Cara Kerja:
+
+Mengukur rata-rata kuadrat selisih antara rating aktual dan prediksi
+Memberikan penalti lebih besar pada error yang lebih besar
+Semakin rendah nilai RMSE, semakin baik performa model
 
 2. Mean Absolute Error (MAE) - Collaborative Filtering
+   
+Formula:
 
-Cara Kerja: MAE mengukur rata-rata kesalahan absolut prediksi. MAE lebih robust terhadap outlier dibandingkan RMSE dan memberikan interpretasi yang lebih mudah dipahami.
+`MAE = Σ|yi - ŷi| / n`
 
-3. Diversity Metrics - Content-Based Filtering
+Cara Kerja:
 
-Brand Diversity:
-Operating System Diversity:
+Mengukur rata-rata absolut selisih antara rating aktual dan prediksi
+Lebih robust terhadap outlier dibanding RMSE
+Interpretasi langsung dalam skala rating (1-5)
 
-Cara Kerja: Metrik diversity mengukur seberapa beragam rekomendasi yang diberikan. Nilai diversity yang tinggi menunjukkan sistem tidak hanya merekomendasikan item yang sangat mirip.
+3. Brand Diversity - Content-Based Filtering
+   
+Formula:
+
+`Brand Diversity = Unique Brands / Total Recommendations`
+
+Cara Kerja:
+
+Mengukur keberagaman merek dalam rekomendasi
+Nilai 1.0 berarti semua rekomendasi dari merek berbeda
+Nilai rendah menunjukkan kurangnya variasi
+
+4. OS Diversity - Content-Based Filtering
+   
+Formula:
+
+`OS Diversity = Unique OS / Total Recommendations`
+
+Cara Kerja:
+
+Mengukur keberagaman sistem operasi dalam rekomendasi
+Mencegah bias terhadap satu jenis OS
+Nilai tinggi menunjukkan rekomendasi yang lebih seimbang
+
+5. Average Similarity Score - Content-Based Filtering
+   
+Formula:
+
+`Avg Similarity = Σ(similarity_scores) / n`
+
+Cara Kerja:
+
+Mengukur rata-rata kemiripan konten dalam rekomendasi
+Nilai tinggi menunjukkan relevansi konten yang baik
+Perlu diimbangi dengan diversity untuk menghindari redundansi
 
 ### Hasil Evaluasi
 
-1. Collaborative Filtering Performance
+1. Collaborative Filtering
 
-![image](https://github.com/user-attachments/assets/b9d51645-bebb-4081-8d9f-9c8b4e57846a)
+RMSE: 3.1312 - Error prediksi rata-rata ~3.13 poin dalam skala 1-5
+MAE: 2.4619 - Simpangan rata-rata ~2.46 poin dari rating aktual
+Interpretasi: Performa moderat, masih ada ruang untuk perbaikan accuracy
 
-Analisis RMSE: Nilai RMSE 0.8945 menunjukkan performa yang sangat baik. Dalam skala rating 1-5, error kurang dari 1 point mengindikasikan model dapat memprediksi preferensi pengguna dengan akurat.
+2. Content-Based Filtering
 
-Analisis MAE: Nilai MAE 0.6789 menunjukkan bahwa rata-rata kesalahan prediksi adalah sekitar 0.68 point, yang dapat diterima untuk sistem rekomendasi.
+Brand Diversity: 0.3200 - 32% rekomendasi dari merek yang berbeda
+OS Diversity: 0.2800 - 28% rekomendasi dari OS yang berbeda
+Average Similarity: 0.4721 - Tingkat kemiripan konten yang memadai
 
-2. Content-Based Filtering Performance
+Interpretasi: Sistem menghasilkan rekomendasi relevan namun kurang beragam, cenderung fokus pada smartphone serupa.
 
-![image](https://github.com/user-attachments/assets/d2712da3-ec05-4218-9097-65c3d304216e)
+### Kesimpulan Evaluasi
 
-Analisis Diversity:
-
-+ Brand diversity 0.4567 menunjukkan sistem mampu merekomendasikan dari berbagai brand, meskipun masih ada bias terhadap brand tertentu
-+ OS diversity 0.3245 menunjukkan sistem cenderung merekomendasikan smartphone dengan OS yang sama
-+ Similarity score 0.7234 menunjukkan rekomendasi sangat relevan dengan item yang dijadikan referensi
-
-### Visualisasi Hasil Evaluasi
-
-+ Actual vs Predicted Rating (Collaborative Filtering)
-
-Plot scatter menunjukkan korelasi yang kuat antara rating aktual dan prediksi, dengan sebagian besar titik berada dekat dengan garis diagonal ideal.
-
-+ Diversity Distribution (Content-Based Filtering)
-
-Histogram menunjukkan distribusi diversity scores dengan:
-
-  + Brand diversity: Distribusi normal dengan puncak di 0.4-0.5
-  + OS diversity: Distribusi skewed dengan konsentrasi di nilai rendah
-  + Similarity scores: Distribusi normal dengan rata-rata tinggi
-
-### Analisis Perbandingan Model
-
-Collaborative Filtering menunjukkan performa superior dalam hal akurasi prediksi:
-
-RMSE < 1.0 menunjukkan prediksi yang sangat akurat
-Model berhasil menangkap pola preferensi yang kompleks
-Dapat memberikan rekomendasi yang personal dan relevan
-
-Content-Based Filtering menunjukkan kelebihan dalam hal interpretability:
-
-Similarity score tinggi menunjukkan relevansi yang baik
-Dapat menjelaskan alasan rekomendasi dengan jelas
-Konsisten dalam memberikan rekomendasi berdasarkan spesifikasi
-
-### Rekomendasi Implementasi
-Berdasarkan hasil evaluasi:
-
-+ Collaborative Filtering direkomendasikan sebagai pendekatan utama untuk akurasi tinggi
-+ Content-Based Filtering dapat digunakan untuk cold start problem dan explainable recommendations
-+ Hybrid approach disarankan untuk menggabungkan kelebihan kedua metode
-+ Real-time learning dapat diimplementasikan untuk adaptasi terhadap perubahan preferensi
-
+Collaborative Filtering menunjukkan kemampuan prediksi yang dapat diterima namun memerlukan perbaikan untuk meningkatkan akurasi
+Content-Based Filtering efektif dalam menemukan smartphone serupa tetapi perlu peningkatan diversity
+Kombinasi kedua pendekatan (hybrid approach) dapat mengoptimalkan kelebihan masing-masing sistem
 
 
 
