@@ -235,34 +235,142 @@ Pengguna memiliki beragam pekerjaan dengan 45 variasi berbeda, paling banyak ber
 
 ## Data Preparation
 
-+ Data Integration
++ Integrasi Data
 
-Alasan: Menggabungkan ketiga dataset diperlukan untuk mendapatkan informasi lengkap tentang pengguna, smartphone, dan rating untuk kedua pendekatan filtering.
+**Proses Penggabungan Dataset**
+Preprocessing menggabungkan tiga dataset utama:
 
-+ Data Cleaning
+1. **Dataset Rating** (`rating_df`) - Berisi rating pengguna untuk smartphone
+   - Menyimpan hubungan antara user_id dan cellphone_id
+   - Mencatat nilai rating yang diberikan pengguna
+
+2. **Dataset Smartphone** (`data_df`) - Berisi spesifikasi dan detail smartphone
+   - Informasi teknis seperti brand, model, operating system
+   - Spesifikasi hardware dan fitur smartphone
+
+3. **Dataset User** (`user_df`) - Berisi informasi demografis pengguna
+   - Data profil pengguna seperti gender, occupation, age
+   - Informasi preferensi dan karakteristik pengguna
+
+**Langkah Penggabungan:**
+```python
+# Langkah 1: Menggabungkan rating dengan data smartphone
+combined_ratings = rating_df.merge(data_df, on='cellphone_id', how='inner')
+
+# Langkah 2: Menggabungkan dengan data pengguna
+final_dataset = combined_ratings.merge(user_df, on='user_id', how='inner')
+```
+
+**Hasil:** Dataset terintegrasi memberikan informasi lengkap yang menghubungkan spesifikasi smartphone, profil pengguna, dan rating yang diberikan.
+
+## Penilaian Kualitas Data
+
+### Analisis Missing Value
+- **Kondisi Awal:** Hanya kolom `occupation` yang memiliki missing value (10 data kosong)
+- **Sumber Masalah:** Semua missing value berasal dari `user_id 53`
+- **Masalah Tambahan:** User yang sama memiliki entry gender tidak valid ("-Select Gender-")
+
+**Penjelasan:** Missing value pada occupation menunjukkan data tidak lengkap dari satu pengguna tertentu, yang dapat mempengaruhi kualitas analisis demografis.
+
+### Operasi Pembersihan Data
+
+#### Penanganan Missing Value
+```python
+# Menghapus baris dengan missing values
+final_dataset.dropna(inplace=True)
+```
+**Hasil:** Eliminasi lengkap missing value di seluruh kolom.
+
+**Penjelasan:** Penghapusan baris dilakukan karena jumlah missing value relatif kecil (10 dari total data) dan berasal dari satu user yang datanya tidak konsisten.
+
+#### Penghapusan Anomali
+```python
+# Menghapus nilai rating anomali
+final_dataset = final_dataset.loc[final_dataset['rating'] != 18]
+```
+**Alasan:** Nilai rating 18 diidentifikasi sebagai outlier yang tidak konsisten dengan skala rating yang diharapkan.
+
+**Penjelasan:** Rating 18 kemungkinan adalah kesalahan input atau data corrupt yang dapat mengganggu akurasi model rekomendasi.
+
+#### Standardisasi Data
+**Normalisasi Field Occupation:**
+- Konversi semua entry ke lowercase untuk konsistensi
+- Perbaikan typo: 'healthare' → 'healthcare'
+- Perluasan singkatan: 'it' → 'information technology'
+
+```python
+final_dataset['occupation'] = final_dataset['occupation'].str.lower()
+final_dataset['occupation'] = final_dataset['occupation'].str.replace('healthare', 'healthcare')
+final_dataset['occupation'] = final_dataset['occupation'].str.replace('it', 'information technology')
+```
+
+**Penjelasan:** Standardisasi occupation penting untuk memastikan kategorisasi yang konsisten dalam analisis demografis dan clustering pengguna.
+
+## Persiapan Fitur
+
+### Penghapusan Duplikasi
+```python
+# Menghapus duplikat berdasarkan ID smartphone
+processed_data.drop_duplicates(subset=['cellphone_id'], inplace=True)
+```
+
+**Penjelasan:** Duplikasi dapat terjadi karena satu smartphone dinilai oleh banyak pengguna. Penghapusan duplikat diperlukan untuk analisis karakteristik smartphone yang unik.
+
+### Ekstraksi Fitur
+Fitur-fitur penting diekstraksi dan dikonversi ke format list:
+
+- `cellphone_id`: Identifikator unik smartphone
+  - Digunakan sebagai primary key untuk referensi smartphone
   
-  + Menghapus baris dengan missing values
-  + Eliminasi rating anomali (nilai 18)
-  + Menghapus duplikasi berdasarkan cellphone_id
-  + Standardisasi format occupation ke lowercase
-  + Koreksi typo pada occupation
+- `brand`: Manufaktur smartphone  
+  - Penting untuk analisis preferensi brand dan clustering
+  
+- `model`: Model smartphone spesifik
+  - Memberikan granularitas tinggi untuk rekomendasi
+  
+- `operating_system`: Sistem operasi mobile
+  - Faktor penting dalam preferensi pengguna
 
-Alasan: Data yang bersih dan konsisten diperlukan untuk menghasilkan model yang akurat dan rekomendasi yang berkualitas.
+**Dimensi Dataset Akhir:** 33 smartphone unik setelah deduplication.
 
-+ Feature Engineering untuk Content-Based
+**Penjelasan:** Pengurangan menjadi 33 smartphone unik memungkinkan fokus pada karakteristik distinct setiap produk tanpa redundansi.
 
-  + Normalisasi fitur numerik (performance, main camera, battery size, screen size, weight)
-  + Diskretisasi fitur numerik menjadi kategori (low, medium, high, very_high)
-  + Pembentukan content profile dengan menggabungkan fitur kategorikal dan numerik
- 
-Alasan: Feature engineering diperlukan untuk Content-Based Filtering agar dapat menghitung similarity antar smartphone berdasarkan spesifikasi teknis.
+### Struktur Dataset Akhir
+```python
+phone_dataset = pd.DataFrame({
+    'cellphone_id': id_list,
+    'brand': brand_list,
+    'model': model_list,
+    'operating_system': os_list,
+})
+```
 
-+ Encoding untuk Collaborative Filtering
+**Penjelasan:** DataFrame final berisi fitur-fitur core yang cukup untuk membangun sistem rekomendasi berbasis content-based filtering.
 
-  + Encoding user_id dan cellphone_id menjadi indeks numerik
-  + Pembentukan user-item matrix untuk training model neural network
+## Hasil Utama
 
-Alasan: Neural network memerlukan input numerik yang consistent dan sequential untuk embedding layers.
+**Peningkatan Kualitas Data:**
+- Nol missing value - Data lengkap untuk semua fitur
+- Penghapusan rating anomali - Konsistensi skala rating
+- Standardisasi entry occupation - Format data seragam
+- Eliminasi smartphone duplikat - Keunikan data produk
+- Format data konsisten - Siap untuk pemodelan
+
+**Dataset Bersih Final:**
+- **Jumlah Record:** 33 smartphone unik
+- **Fitur:** 4 atribut core (ID, brand, model, OS)
+- **Kualitas:** Sepenuhnya dibersihkan dan distandarisasi
+- **Kesiapan:** Siap untuk pemodelan sistem rekomendasi
+
+## Penggunaan
+Dataset `phone_dataset` yang telah diproses siap untuk:
+
+- **Content-based Filtering:** Algoritma rekomendasi berdasarkan similarity fitur
+- **Analisis Similarity:** Perbandingan karakteristik antar smartphone
+- **Training Model:** Pelatihan model machine learning untuk rekomendasi
+- **Feature Engineering:** Pengembangan fitur lanjutan untuk model yang lebih kompleks
+
+Dataset ini optimal untuk sistem rekomendasi skala kecil hingga menengah dengan focus pada karakteristik teknis smartphone.
 
 ## Modeling
 
