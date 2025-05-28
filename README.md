@@ -103,12 +103,10 @@ Kekurangan:
 ### Informasi Dataset
 
 + Sumber Data: Dataset Smartphone dari Kaggle (cellphones.zip)
-+ Periode Data: Data smartphone dari berbagai tahun rilis
 + Format Data: 3 file CSV terpisah
-+ Total Records:
-  + Data smartphone: 1000+ entries
-  + Rating data: 15000+ entries
-  + User data: 500+ users
+  + Data smartphone (data.csv):  33 data ponsel, 14 atribut
+  + Rating data (rating.csv): 990 data penilaian, 3 kolom (user_id, cellphone_id, rating)
+  + User data (user.csv): 99 pengguna, 4 kolom (user_id, age, gender, occupation).
  
 ### Kondisi Data
 
@@ -133,27 +131,108 @@ Setelah melakukan pemeriksaan awal, kondisi dataset adalah sebagai berikut:
 
 ![image](https://github.com/user-attachments/assets/ba7f6225-3e9f-4d13-a555-9f0a1930b583)
 
-### Exploratory Data Analysis (EDA)
+## Exploratory Data Analysis (EDA)
+
+1. Data
 
 + Distribusi Brand Smartphone
 
-Analisis menunjukkan bahwa dataset memiliki distribusi brand yang beragam dengan dominasi beberapa brand populer seperti Samsung, Apple, dan Xiaomi.
+![image](https://github.com/user-attachments/assets/a98a353e-d30a-4c0e-8e50-8511012ca071)
 
-+ Distribusi Rating Pengguna
+Analisis menunjukkan bahwa dataset memiliki distribusi brand yang beragam dengan di dominasi oleh Samsung dengan 8 model, diikuti Apple dengan 6, sementara merek lain memiliki jumlah model yang lebih sedikit dan bervariasi.
 
-Mayoritas pengguna memberikan rating tinggi (4-5), menunjukkan bias positif dalam penilaian atau kemungkinan hanya pengguna yang puas yang memberikan rating.
++ Distribusi Sistem Operasi
 
-+ Aktivitas Pengguna
+![image](https://github.com/user-attachments/assets/9e8cc576-9379-4d46-b861-a40b941d19a4)
 
-Distribusi aktivitas pengguna mengikuti pola long-tail, dimana sebagian kecil pengguna sangat aktif memberikan banyak rating sementara mayoritas pengguna hanya memberikan sedikit rating.
+Distribusi sistem operasi didominasi oleh Android dengan 27 model, sementara iOS hanya memiliki 6 model dalam dataset.
 
-+ Spesifikasi Smartphone
++ Distribusi Kapasitas Memori Internal
 
-  + Operating System: Dominasi Android (80%) dibandingkan iOS (20%)
-  + Performance Score: Distribusi normal dengan rata-rata 6.5/10
-  + Memory & RAM: Variasi yang luas dari entry-level hingga flagship
-  + Camera: Range dari 8MP hingga 108MP
- 
+![image](https://github.com/user-attachments/assets/8eb3e507-47c9-474a-bcee-a745e70d983f)
+
+Kapasitas memori internal yang paling umum adalah 128GB dengan 20 model, diikuti oleh 256GB, 64GB, 32GB, dan hanya satu model dengan 512GB.
+
++ Distribusi Kapasitas RAM
+
+![image](https://github.com/user-attachments/assets/b3986cc5-221d-44bc-97df-9c74ca807d23)
+
+Kapasitas RAM paling banyak tersedia adalah 8GB dengan 13 model, diikuti oleh 4GB dan 6GB masing-masing 6 model, serta 3GB dan 12GB yang lebih sedikit.
+
++  Kategorisasi Performa
+
+![image](https://github.com/user-attachments/assets/e8c8ad13-7e45-4e4f-9dda-2c8a549dc6f8)
+
+Terdapat 23 smartphone dengan performa tinggi (skor > 5) dan 10 smartphone dengan performa rendah (skor ≤ 5) dalam dataset.
+
++ Analisis Kamera Utama
+
+![image](https://github.com/user-attachments/assets/d31ab2f4-15ba-4c5d-83b1-385f02c47647)
+
+Resolusi kamera utama yang paling umum adalah 50MP dengan 13 model, diikuti 12MP dengan 10 model, serta beberapa model dengan resolusi lebih tinggi seperti 64MP, 48MP, dan 108MP.
+
++ Analisis Kapasitas Baterai
+
+![image](https://github.com/user-attachments/assets/ec6e3c60-731f-4bc4-9d77-96956380c33e)
+
+Kapasitas baterai 5000mAh paling umum dengan 11 model, sementara kapasitas lainnya bervariasi dari 2018mAh hingga 5003mAh dengan jumlah model lebih sedikit.
+
++ Analisis Ukuran Layar
+
+![image](https://github.com/user-attachments/assets/b2720a1d-69ed-490c-bba0-899dfd2b9d44)
+
+Ukuran layar 6.7 inci paling umum dengan 8 model, diikuti ukuran 6.5 inci dan 6.1 inci, serta variasi ukuran layar lain yang lebih kecil jumlahnya.
+
++ Analisis Berat Smartphone
+
+![image](https://github.com/user-attachments/assets/34779463-8e9d-444e-b512-71a0e8779a17)
+
+Berat smartphone bervariasi dalam 27 kategori berbeda, dengan berat 204 gram paling sering muncul sebanyak 5 model.
+
++ Analisis Tahun Rilis
+
+![image](https://github.com/user-attachments/assets/79f59dc3-3500-449b-9bee-df59c52972d4)
+
+Smartphone dalam dataset dirilis terutama pada tahun 2021 dan 2022 dengan jumlah yang sama, sementara hanya satu model yang dirilis pada 2018.
+
+2. Rating
+
++ Aktivitas Penguna
+
+![image](https://github.com/user-attachments/assets/3babe50d-c838-4347-bcdb-97de260f0ebb)
+
+Setiap user dalam dataset rating memberikan tepat 10 ulasan, menunjukkan distribusi aktivitas review yang seragam antar pengguna.
+
++ Popularitas Smartphone
+
+![image](https://github.com/user-attachments/assets/086bfd55-5f29-4a67-81c7-65866b457831)
+
+Jumlah review per smartphone berkisar antara 20 hingga 41, menunjukkan variasi popularitas antar model.
+
++ Distribusi Rating
+
+![image](https://github.com/user-attachments/assets/2030b384-cc0e-4376-9d34-d57721caba39)
+
+Sebagian besar pengguna memberikan rating tinggi (7–10), dengan rating 8 sebagai yang paling sering muncul.
+
+3. User
+
++ Distribusi Rating
+
+![image](https://github.com/user-attachments/assets/b30f2178-5caa-44e0-ba58-e41d11a7489a)
+
+Distribusi usia pengguna beragam, dengan konsentrasi tertinggi pada usia 25 tahun dan rentang usia pengguna dari 21 hingga 61 tahun.
+
++ Distribusi Gender
+
+![image](https://github.com/user-attachments/assets/f5a75de9-f3d2-4ee9-bbf1-8fc36f0ed814)
+
+Mayoritas pengguna adalah laki-laki (50) dan perempuan (46), dengan (3) data yang belum terisi pada kategori gender.
+
++ Distribusi Pekerjaan
+
+Pengguna memiliki beragam pekerjaan dengan 45 variasi berbeda, paling banyak berprofesi sebagai manager, information technology, dan IT.
+
 ## Data Preparation
 
 + Data Integration
