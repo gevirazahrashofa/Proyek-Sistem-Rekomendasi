@@ -235,7 +235,7 @@ Pengguna memiliki beragam pekerjaan dengan 45 variasi berbeda, paling banyak ber
 
 ## Data Preparation
 
-+ Integrasi Data
+1. Integrasi Data
 
 **Proses Penggabungan Dataset**
 Preprocessing menggabungkan tiga dataset utama:
@@ -263,18 +263,18 @@ final_dataset = combined_ratings.merge(user_df, on='user_id', how='inner')
 
 **Hasil:** Dataset terintegrasi memberikan informasi lengkap yang menghubungkan spesifikasi smartphone, profil pengguna, dan rating yang diberikan.
 
-## Penilaian Kualitas Data
+2. Penilaian Kualitas Data
 
-### Analisis Missing Value
+**Analisis Missing Value**
 - **Kondisi Awal:** Hanya kolom `occupation` yang memiliki missing value (10 data kosong)
 - **Sumber Masalah:** Semua missing value berasal dari `user_id 53`
 - **Masalah Tambahan:** User yang sama memiliki entry gender tidak valid ("-Select Gender-")
 
 **Penjelasan:** Missing value pada occupation menunjukkan data tidak lengkap dari satu pengguna tertentu, yang dapat mempengaruhi kualitas analisis demografis.
 
-### Operasi Pembersihan Data
+**Operasi Pembersihan Data**
 
-#### Penanganan Missing Value
++ Penanganan Missing Value
 ```python
 # Menghapus baris dengan missing values
 final_dataset.dropna(inplace=True)
@@ -283,7 +283,7 @@ final_dataset.dropna(inplace=True)
 
 **Penjelasan:** Penghapusan baris dilakukan karena jumlah missing value relatif kecil (10 dari total data) dan berasal dari satu user yang datanya tidak konsisten.
 
-#### Penghapusan Anomali
++ Penghapusan Anomali
 ```python
 # Menghapus nilai rating anomali
 final_dataset = final_dataset.loc[final_dataset['rating'] != 18]
@@ -292,7 +292,7 @@ final_dataset = final_dataset.loc[final_dataset['rating'] != 18]
 
 **Penjelasan:** Rating 18 kemungkinan adalah kesalahan input atau data corrupt yang dapat mengganggu akurasi model rekomendasi.
 
-#### Standardisasi Data
++ Standardisasi Data
 **Normalisasi Field Occupation:**
 - Konversi semua entry ke lowercase untuk konsistensi
 - Perbaikan typo: 'healthare' → 'healthcare'
@@ -306,9 +306,9 @@ final_dataset['occupation'] = final_dataset['occupation'].str.replace('it', 'inf
 
 **Penjelasan:** Standardisasi occupation penting untuk memastikan kategorisasi yang konsisten dalam analisis demografis dan clustering pengguna.
 
-## Persiapan Fitur
+3. Persiapan Fitur
 
-### Penghapusan Duplikasi
+**Penghapusan Duplikasi**
 ```python
 # Menghapus duplikat berdasarkan ID smartphone
 processed_data.drop_duplicates(subset=['cellphone_id'], inplace=True)
@@ -316,7 +316,7 @@ processed_data.drop_duplicates(subset=['cellphone_id'], inplace=True)
 
 **Penjelasan:** Duplikasi dapat terjadi karena satu smartphone dinilai oleh banyak pengguna. Penghapusan duplikat diperlukan untuk analisis karakteristik smartphone yang unik.
 
-### Ekstraksi Fitur
+**Ekstraksi Fitur**
 Fitur-fitur penting diekstraksi dan dikonversi ke format list:
 
 - `cellphone_id`: Identifikator unik smartphone
@@ -335,7 +335,7 @@ Fitur-fitur penting diekstraksi dan dikonversi ke format list:
 
 **Penjelasan:** Pengurangan menjadi 33 smartphone unik memungkinkan fokus pada karakteristik distinct setiap produk tanpa redundansi.
 
-### Struktur Dataset Akhir
+**Struktur Dataset Akhir**
 ```python
 phone_dataset = pd.DataFrame({
     'cellphone_id': id_list,
@@ -347,7 +347,7 @@ phone_dataset = pd.DataFrame({
 
 **Penjelasan:** DataFrame final berisi fitur-fitur core yang cukup untuk membangun sistem rekomendasi berbasis content-based filtering.
 
-## Hasil Utama
+4. Hasil Utama
 
 **Peningkatan Kualitas Data:**
 - Nol missing value - Data lengkap untuk semua fitur
@@ -362,7 +362,7 @@ phone_dataset = pd.DataFrame({
 - **Kualitas:** Sepenuhnya dibersihkan dan distandarisasi
 - **Kesiapan:** Siap untuk pemodelan sistem rekomendasi
 
-## Penggunaan
+5. Penggunaan
 Dataset `phone_dataset` yang telah diproses siap untuk:
 
 - **Content-based Filtering:** Algoritma rekomendasi berdasarkan similarity fitur
