@@ -10,6 +10,7 @@ Dalam era digital saat ini, pasar smartphone berkembang sangat pesat dengan ribu
 
 E-commerce dan platform review teknologi membutuhkan sistem rekomendasi yang efektif untuk meningkatkan kepuasan pelanggan dan conversion rate. Menurut penelitian dari MIT Sloan, sistem rekomendasi yang baik dapat meningkatkan penjualan hingga 35% dan engagement pengguna hingga 60%.
 
+
 ### Mengapa Proyek Ini Penting?
 
 + Membantu pengguna menemukan smartphone yang sesuai dengan preferensi tanpa harus melalui ratusan pilihan
@@ -50,64 +51,64 @@ Tujuan dari proyek sistem rekomendasi smartphone ini adalah:
 
 Merekomendasikan smartphone berdasarkan kesamaan spesifikasi teknis dengan smartphone yang disukai pengguna sebelumnya.
 
-Fitur yang digunakan:
++ Fitur yang digunakan:
 
-+ Brand smartphone
-+ Operating System (Android/iOS)
-+ Performance score
-+ Kamera utama (megapixel)
-+ Kapasitas baterai
-+ Ukuran layar
-+ Berat smartphone
+    + Brand smartphone
+    + Operating System (Android/iOS)
+    + Performance score
+    + Kamera utama (megapixel)
+    + Kapasitas baterai
+    + Ukuran layar
+    + Berat smartphone
 
-Kelebihan:
++ Kelebihan:
 
-+ Tidak memerlukan data pengguna lain (mengatasi cold start problem)
-+ Dapat menjelaskan alasan rekomendasi dengan jelas
-+ Bekerja baik untuk pengguna dengan preferensi yang konsisten
-+ Tidak terpengaruh oleh bias popularitas
+    + Tidak memerlukan data pengguna lain (mengatasi cold start problem)
+    + Dapat menjelaskan alasan rekomendasi dengan jelas
+    + Bekerja baik untuk pengguna dengan preferensi yang konsisten
+    + Tidak terpengaruh oleh bias popularitas
 
-Kekurangan:
++ Kekurangan:
 
-+ Terbatas pada fitur yang tersedia dalam metadata
-+ Cenderung memberikan rekomendasi yang homogen
-+ Sulit menemukan smartphone yang unexpected namun relevan
-+ Memerlukan feature engineering yang baik
+    + Terbatas pada fitur yang tersedia dalam metadata
+    + Cenderung memberikan rekomendasi yang homogen
+    + Sulit menemukan smartphone yang unexpected namun relevan
+    + Memerlukan feature engineering yang baik
 
 2. Collaborative Filtering
 
 Menggunakan Neural Network dengan embedding layers untuk memprediksi rating smartphone berdasarkan pola preferensi pengguna dan item similarity.
 
-Arsitektur Model:
++ Arsitektur Model:
 
-+ User dan Item Embedding layers (50 dimensi)
-+ Dense layers dengan dropout untuk regularization
-+ Output layer untuk prediksi rating (1-5)
+    + User dan Item Embedding layers (50 dimensi)
+    + Dense layers dengan dropout untuk regularization
+    + Output layer untuk prediksi rating (1-5)
 
-Kelebihan:
++ Kelebihan:
 
-+ Dapat menangkap pola kompleks dalam preferensi pengguna
-+ Mampu memberikan rekomendasi serendipitous
-+ Memanfaatkan collective intelligence dari semua pengguna
-+ Tidak memerlukan feature engineering yang kompleks
+    + Dapat menangkap pola kompleks dalam preferensi pengguna
+    + Mampu memberikan rekomendasi serendipitous
+    + Memanfaatkan collective intelligence dari semua pengguna
+    + Tidak memerlukan feature engineering yang kompleks
 
-Kekurangan:
++ Kekurangan:
 
-+ Cold start problem untuk pengguna atau smartphone baru
-+ Memerlukan data rating yang cukup banyak
-+ Model kompleks yang membutuhkan computational resources tinggi
-+ Sulit untuk diinterpretasi
+    + Cold start problem untuk pengguna atau smartphone baru
+    + Memerlukan data rating yang cukup banyak
+    + Model kompleks yang membutuhkan computational resources tinggi
+    + Sulit untuk diinterpretasi
 
 ## Data Understanding
 
 ### Informasi Dataset
 
-+ Sumber Data: Dataset Smartphone dari Kaggle (cellphones.zip)
++ Sumber Data: Dataset Smartphone dari Kaggle https://www.kaggle.com/datasets/meirnizri/cellphones-recommendations/data
 + Format Data: 3 file CSV terpisah
-  + Data smartphone (data.csv):  33 data ponsel, 14 atribut
-  + Rating data (rating.csv): 990 data penilaian, 3 kolom (user_id, cellphone_id, rating)
-  + User data (user.csv): 99 pengguna, 4 kolom (user_id, age, gender, occupation).
- 
+  + Data smartphone (cellphones data/data.csv):  33 data ponsel, 14 atribut
+  + Rating data (cellphones ratings/rating.csv): 990 data penilaian, 3 kolom (user_id, cellphone_id, rating)
+  + User data (cellphones users/user.csv): 99 pengguna, 4 kolom (user_id, age, gender, occupation).
+
 ### Kondisi Data
 
 Setelah melakukan pemeriksaan awal, kondisi dataset adalah sebagai berikut:
@@ -131,7 +132,8 @@ Setelah melakukan pemeriksaan awal, kondisi dataset adalah sebagai berikut:
 
 ![image](https://github.com/user-attachments/assets/ba7f6225-3e9f-4d13-a555-9f0a1930b583)
 
-## Exploratory Data Analysis (EDA)
+
+### Exploratory Data Analysis (EDA)
 
 1. Data
 
@@ -237,285 +239,287 @@ Pengguna memiliki beragam pekerjaan dengan 45 variasi berbeda, paling banyak ber
 
 1. Integrasi Data
 
-**Proses Penggabungan Dataset**
+Proses Penggabungan Dataset
+
 Preprocessing menggabungkan tiga dataset utama:
 
-1. **Dataset Rating** (`rating_df`) - Berisi rating pengguna untuk smartphone
-   - Menyimpan hubungan antara user_id dan cellphone_id
-   - Mencatat nilai rating yang diberikan pengguna
++ Dataset Rating (rating_df) - Berisi rating pengguna untuk smartphone
+  + Menyimpan hubungan antara user_id dan cellphone_id
+  + Mencatat nilai rating yang diberikan pengguna
++ Dataset Smartphone (data_df) - Berisi spesifikasi dan detail smartphone
+  + Informasi teknis seperti brand, model, operating system
+  + Spesifikasi hardware dan fitur smartphone
++ Dataset User (user_df) - Berisi informasi demografis pengguna
+  + Data profil pengguna seperti gender, occupation, age
+  + Informasi preferensi dan karakteristik pengguna
+ 
+![image](https://github.com/user-attachments/assets/0c95b032-8815-44a6-a801-82e59489e2ae)
 
-2. **Dataset Smartphone** (`data_df`) - Berisi spesifikasi dan detail smartphone
-   - Informasi teknis seperti brand, model, operating system
-   - Spesifikasi hardware dan fitur smartphone
-
-3. **Dataset User** (`user_df`) - Berisi informasi demografis pengguna
-   - Data profil pengguna seperti gender, occupation, age
-   - Informasi preferensi dan karakteristik pengguna
-
-**Langkah Penggabungan:**
-```python
-# Langkah 1: Menggabungkan rating dengan data smartphone
-combined_ratings = rating_df.merge(data_df, on='cellphone_id', how='inner')
-
-# Langkah 2: Menggabungkan dengan data pengguna
-final_dataset = combined_ratings.merge(user_df, on='user_id', how='inner')
-```
-
-**Hasil:** Dataset terintegrasi memberikan informasi lengkap yang menghubungkan spesifikasi smartphone, profil pengguna, dan rating yang diberikan.
+Hasil: Dataset terintegrasi memberikan informasi lengkap yang menghubungkan spesifikasi smartphone, profil pengguna, dan rating yang diberikan.
 
 2. Penilaian Kualitas Data
 
-**Analisis Missing Value**
-- **Kondisi Awal:** Hanya kolom `occupation` yang memiliki missing value (10 data kosong)
-- **Sumber Masalah:** Semua missing value berasal dari `user_id 53`
-- **Masalah Tambahan:** User yang sama memiliki entry gender tidak valid ("-Select Gender-")
++ Analisis Missing Value
 
-**Penjelasan:** Missing value pada occupation menunjukkan data tidak lengkap dari satu pengguna tertentu, yang dapat mempengaruhi kualitas analisis demografis.
+  + Kondisi Awal: Hanya kolom occupation yang memiliki missing value (10 data kosong)
+  + Sumber Masalah: Semua missing value berasal dari user_id 53
+  + Masalah Tambahan: User yang sama memiliki entry gender tidak valid ("-Select Gender-")
 
-**Operasi Pembersihan Data**
+Penjelasan: Missing value pada occupation menunjukkan data tidak lengkap dari satu pengguna tertentu, yang dapat mempengaruhi kualitas analisis demografis.
 
-+ Penanganan Missing Value
-```python
-# Menghapus baris dengan missing values
-final_dataset.dropna(inplace=True)
-```
-**Hasil:** Eliminasi lengkap missing value di seluruh kolom.
-
-**Penjelasan:** Penghapusan baris dilakukan karena jumlah missing value relatif kecil (10 dari total data) dan berasal dari satu user yang datanya tidak konsisten.
-
-+ Penghapusan Anomali
-```python
-# Menghapus nilai rating anomali
-final_dataset = final_dataset.loc[final_dataset['rating'] != 18]
-```
-**Alasan:** Nilai rating 18 diidentifikasi sebagai outlier yang tidak konsisten dengan skala rating yang diharapkan.
-
-**Penjelasan:** Rating 18 kemungkinan adalah kesalahan input atau data corrupt yang dapat mengganggu akurasi model rekomendasi.
-
-+ Standardisasi Data
-**Normalisasi Field Occupation:**
-- Konversi semua entry ke lowercase untuk konsistensi
-- Perbaikan typo: 'healthare' → 'healthcare'
-- Perluasan singkatan: 'it' → 'information technology'
-
-```python
-final_dataset['occupation'] = final_dataset['occupation'].str.lower()
-final_dataset['occupation'] = final_dataset['occupation'].str.replace('healthare', 'healthcare')
-final_dataset['occupation'] = final_dataset['occupation'].str.replace('it', 'information technology')
-```
-
-**Penjelasan:** Standardisasi occupation penting untuk memastikan kategorisasi yang konsisten dalam analisis demografis dan clustering pengguna.
-
-3. Persiapan Fitur
-
-**Penghapusan Duplikasi**
-```python
-# Menghapus duplikat berdasarkan ID smartphone
-processed_data.drop_duplicates(subset=['cellphone_id'], inplace=True)
-```
-
-**Penjelasan:** Duplikasi dapat terjadi karena satu smartphone dinilai oleh banyak pengguna. Penghapusan duplikat diperlukan untuk analisis karakteristik smartphone yang unik.
-
-**Ekstraksi Fitur**
-Fitur-fitur penting diekstraksi dan dikonversi ke format list:
-
-- `cellphone_id`: Identifikator unik smartphone
-  - Digunakan sebagai primary key untuk referensi smartphone
++ Operasi Pembersihan Data
+  + Penanganan Missing Value
   
-- `brand`: Manufaktur smartphone  
-  - Penting untuk analisis preferensi brand dan clustering
+    ![image](https://github.com/user-attachments/assets/72d4e458-9a0b-47c3-861c-1f0dee4d20ce)
+
+  Hasil: Eliminasi lengkap missing value di seluruh kolom.
   
-- `model`: Model smartphone spesifik
-  - Memberikan granularitas tinggi untuk rekomendasi
+  Penjelasan: Penghapusan baris dilakukan karena jumlah missing value relatif kecil (10 dari total data) dan berasal dari satu user yang datanya tidak konsisten, sehingga penghapusan tidak signifikan mengurangi volume data yang berguna.
+
+  + Penghapusan Anomali
+    
+    ![image](https://github.com/user-attachments/assets/9b071624-1815-4f8c-8d39-ac818b81f8e0)
+    
+    Alasan: Nilai rating 18 diidentifikasi sebagai outlier yang tidak konsisten dengan skala rating yang diharapkan (kemungkinan kesalahan input atau data corrupt).
+    
+    Penjelasan: Rating 18 kemungkinan adalah kesalahan input atau data corrupt yang dapat mengganggu akurasi model rekomendasi karena berada di luar rentang rating yang valid (1-10) yang diamati dalam dataset.
+
+  + Standardisasi Data
+ 
+    ![image](https://github.com/user-attachments/assets/f23c2511-8b86-4c52-91f3-0cc32a540985)
+
+    Normalisasi Field Occupation:
+    
+    + Konversi semua entry ke lowercase untuk konsistensi
+    + Perbaikan typo: 'healthare' → 'healthcare'
+    + Perluasan singkatan: 'it' → 'information technology'
+      
+    Penjelasan: Standardisasi occupation penting untuk memastikan kategorisasi yang konsisten dalam analisis demografis dan clustering pengguna, serta untuk meminimalisir variasi data yang tidak perlu akibat kesalahan penulisan.
+
+3. Persiapan Fitur per Pendekatan
+
++ Content-Based Filtering Data Preparation
   
-- `operating_system`: Sistem operasi mobile
-  - Faktor penting dalam preferensi pengguna
+Untuk pendekatan Content-Based Filtering, data dipersiapkan dengan fokus pada fitur deskriptif smartphone yang akan digunakan untuk menghitung kemiripan konten.
 
-**Dimensi Dataset Akhir:** 33 smartphone unik setelah deduplication.
+  + Penghapusan Duplikasi Data Smartphone:
+    
+    Duplikasi pada cellphone_id dapat terjadi karena satu smartphone dinilai oleh banyak pengguna atau terdapat entri ganda dalam dataset data.csv. Penghapusan duplikat diperlukan untuk memastikan setiap smartphone unik memiliki satu representasi data.
+    
+    Dengan hanya mempertahankan entri unik berdasarkan cellphone_id, kita memastikan bahwa analisis karakteristik smartphone dan penghitungan kemiripan konten tidak terdistorsi oleh data yang berulang.
 
-**Penjelasan:** Pengurangan menjadi 33 smartphone unik memungkinkan fokus pada karakteristik distinct setiap produk tanpa redundansi.
+  + Ekstraksi dan Penggabungan Fitur Teks:
+  
+  Fitur-fitur penting seperti cellphone_id, brand, model, dan operating_system diekstraksi. Fitur-fitur teks (brand, model, operating system) kemudian digabungkan menjadi satu string tunggal (features) untuk setiap smartphone. Penggabungan ini penting untuk menciptakan "profil" konten setiap smartphone.
+  
+   DataFrame phone_dataset final berisi fitur-fitur inti yang cukup untuk membangun sistem rekomendasi berbasis content-based filtering. Kolom features inilah yang akan diolah lebih lanjut.
+  
+  + TF-IDF Vectorization:
 
-**Struktur Dataset Akhir**
-```python
-phone_dataset = pd.DataFrame({
-    'cellphone_id': id_list,
-    'brand': brand_list,
-    'model': model_list,
-    'operating_system': os_list,
-})
-```
+    Metode Term Frequency-Inverse Document Frequency (TF-IDF) digunakan untuk mengubah teks fitur gabungan (features) ini menjadi representasi numerik (vektor) yang dapat diproses oleh algoritma. TF-IDF memberikan bobot lebih tinggi pada kata-kata yang penting dalam satu dokumen tetapi jarang muncul di dokumen lain. Hal ini membantu mengidentifikasi fitur unik yang membedakan satu smartphone dari yang lain dalam korpus.
+    
+    Proses ini menghasilkan tfidf_matrix di mana setiap baris merepresentasikan smartphone dan setiap kolom merepresentasikan bobot TF-IDF dari suatu kata kunci. Matriks tfidf_matrix ini kemudian digunakan untuk menghitung kesamaan antar smartphone di bagian Modeling.
 
-**Penjelasan:** DataFrame final berisi fitur-fitur core yang cukup untuk membangun sistem rekomendasi berbasis content-based filtering.
+    ![image](https://github.com/user-attachments/assets/ca11fc1b-79c3-4c59-9de0-05801bc59199)
 
-4. Hasil Utama
++ Collaborative Filtering Data Preparation
 
-**Peningkatan Kualitas Data:**
-- Nol missing value - Data lengkap untuk semua fitur
-- Penghapusan rating anomali - Konsistensi skala rating
-- Standardisasi entry occupation - Format data seragam
-- Eliminasi smartphone duplikat - Keunikan data produk
-- Format data konsisten - Siap untuk pemodelan
+Untuk pendekatan Collaborative Filtering, fokusnya adalah pada data interaksi pengguna-item (rating) untuk melatih model yang dapat memprediksi preferensi pengguna.
 
-**Dataset Bersih Final:**
-- **Jumlah Record:** 33 smartphone unik
-- **Fitur:** 4 atribut core (ID, brand, model, OS)
-- **Kualitas:** Sepenuhnya dibersihkan dan distandarisasi
-- **Kesiapan:** Siap untuk pemodelan sistem rekomendasi
+  + Pemetaan ID Pengguna dan Item:
+    
+  user_id dan cellphone_id asli (yang merupakan ID arbitrer) dikodekan ulang menjadi indeks numerik berurutan. Ini diperlukan karena model deep learning, khususnya embedding layer, memerlukan input integer berurutan sebagai indeks.
+    
+    Pemetaan ini menciptakan representasi integer padat untuk setiap pengguna dan smartphone, mengoptimalkan penggunaan memori dan komputasi dalam model neural network.
+    
+  + Normalisasi Rating:
 
+  Rating asli (misalnya, dari 1-10) dinormalisasi ke skala 0-1. Normalisasi ini adalah praktik umum dalam deep learning untuk memastikan bahwa nilai input berada dalam rentang yang konsisten, yang dapat mempercepat konvergensi model dan meningkatkan stabilitas pelatihan.
+
+  Rating yang dinormalisasi akan menjadi target output model Collaborative Filtering.
+  
+  + Data Split untuk Pelatihan dan Pengujian:
+
+  Data rating yang telah diproses dibagi menjadi set pelatihan (training) dan pengujian (testing) untuk mengevaluasi kinerja model secara objektif. Pembagian dilakukan secara acak (random_state=42) dengan rasio 80% untuk pelatihan dan 20% untuk pengujian.
+
+  Pembagian ini memastikan bahwa model dilatih pada satu subset data (X_train, y_train) dan dievaluasi pada subset data yang belum pernah dilihat sebelumnya (X_test, y_test) untuk mengukur kemampuan generalisasinya dan mendeteksi overfitting.
+
+4. Hasil Utama Data Preparation
+
++ Peningkatan Kualitas Data:
+  
+  + Nol missing value - Data lengkap untuk semua fitur.
+  + Penghapusan rating anomali - Konsistensi skala rating.
+  + Standardisasi entri occupation - Format data seragam.
+  + Eliminasi smartphone duplikat - Keunikan data produk, penting untuk Content-Based Filtering.
+  + Format data konsisten - Siap untuk pemodelan.
+
++ Dataset Bersih Final:
+  
+  + Jumlah Record: 33 smartphone unik (untuk Content-Based), dan jumlah interaksi rating yang bersih setelah pra-pemrosesan (untuk Collaborative Filtering).
+  + Fitur Content-Based: cellphone_id, brand, model, operating_system, dan features (gabungan teks).
+  + Fitur Collaborative Filtering: user (encoded), cellphone (encoded), dan rating_normalized.
+  + Kualitas: Sepenuhnya dibersihkan dan distandarisasi sesuai kebutuhan masing-masing pendekatan.
+  + Kesiapan: Siap untuk pemodelan sistem rekomendasi.
+    
 5. Penggunaan
-Dataset `phone_dataset` yang telah diproses siap untuk:
 
-- **Content-based Filtering:** Algoritma rekomendasi berdasarkan similarity fitur
-- **Analisis Similarity:** Perbandingan karakteristik antar smartphone
-- **Training Model:** Pelatihan model machine learning untuk rekomendasi
-- **Feature Engineering:** Pengembangan fitur lanjutan untuk model yang lebih kompleks
+Dataset yang telah diproses siap untuk:
 
-Dataset ini optimal untuk sistem rekomendasi skala kecil hingga menengah dengan focus pada karakteristik teknis smartphone.
++ Content-based Filtering: Algoritma rekomendasi berdasarkan similarity fitur (menggunakan tfidf_matrix).
++ Collaborative Filtering: Pelatihan model neural network untuk prediksi rating (menggunakan X_train, y_train, X_test, y_test).
++ Analisis Similarity: Perbandingan karakteristik antar smartphone.
++ Feature Engineering: Pengembangan fitur lanjutan untuk model yang lebih kompleks (jika diperlukan).
+  
+Dataset ini optimal untuk sistem rekomendasi skala kecil hingga menengah dengan fokus pada karakteristik teknis smartphone dan pola interaksi pengguna.
 
 ## Modeling
 
 1. Content-Based Filtering
 
-Menggunakan TF-IDF Vectorization dan Cosine Similarity untuk menghitung kemiripan antar smartphone berdasarkan content profile yang telah dibuat.
++ Cosine Similarity:
+  Setelah fitur teks smartphone diubah menjadi representasi numerik menggunakan TF-IDF Vectorization di tahap Data Preparation, langkah selanjutnya adalah menghitung kemiripan antar smartphone. Cosine Similarity adalah metrik yang umum digunakan untuk mengukur kemiripan antara dua vektor non-nol dalam ruang produk skalar. Nilai Cosine Similarity berkisar antara -1 (berlawanan sempurna) hingga 1 (sangat mirip sempurna). Dalam konteks ini, nilai yang lebih tinggi menunjukkan kemiripan konten yang lebih tinggi antara dua smartphone.
 
-![image](https://github.com/user-attachments/assets/fff837f2-e5b6-4477-ab02-a6b912d05174)
-
-Content-based similarity matrix sudah terbentuk dengan 33 smartphone dan matriks similarity berdimensi (33, 33) yang sesuai.
-
-+ Contoh Top-5 Recommendations
-
-![image](https://github.com/user-attachments/assets/be8ecce6-621f-4b9c-a1cf-e45d93044d2c)
-
-Rekomendasi menunjukkan bahwa smartphone dengan fitur dan merek serupa (Motorola Moto G series) memiliki kesamaan konten sangat tinggi, sementara perangkat dari merek lain seperti Samsung meskipun masih Android, memiliki kesamaan yang jauh lebih rendah.
-
-2. Collaborative Filtering
-
-Menggunakan Neural Collaborative Filtering dengan arsitektur deep learning untuk memprediksi rating smartphone berdasarkan embedding user dan item.
+  cosine_sim adalah matriks berdimensi (N timesN), di mana N adalah jumlah smartphone unik (33 dalam kasus ini). Setiap elemen C_ij dalam matriks ini menunjukkan tingkat kemiripan konten antara smartphone i dan smartphone j.
 
 + Contoh Top-5 Recommendations
 
-![image](https://github.com/user-attachments/assets/f1cacd85-2ccc-4e58-b1db-724d8f54335c)
+![image](https://github.com/user-attachments/assets/e4b4c57b-59ad-469f-bba6-09139287c8fd)
 
-User ID 0 menunjukkan preferensi kuat terhadap Samsung Galaxy S22 (rating 9), yang dapat digunakan sebagai acuan utama dalam merekomendasikan smartphone sejenis dengan performa tinggi dan sistem operasi Android.
-
-### Perbandingan Kedua Pendeketan
-
-1. Content-Based Filtering
-
-+ Kelebihan:
-
-  + Memberikan rekomendasi berdasarkan spesifikasi teknis yang jelas
-  + Tidak memerlukan data pengguna lain
-  + Dapat menjelaskan alasan rekomendasi
-  + Konsisten dengan preferensi pengguna
-
-+ Kekurangan:
-
-  + Rekomendasi cenderung homogen (brand dan OS yang sama)
-  + Tidak dapat menangkap preferensi yang kompleks
-  + Terbatas pada fitur yang tersedia
+Rekomendasi menunjukkan bahwa smartphone dengan fitur dan merek serupa (Motorola Moto G series) memiliki kesamaan konten sangat tinggi, sementara perangkat dari merek lain seperti Samsung meskipun masih Android, memiliki kesamaan yang jauh lebih rendah. Hal ini mengindikasikan bahwa model Content-Based Filtering berhasil mengidentifikasi smartphone yang memiliki karakteristik serupa berdasarkan profil teks yang diolah.
 
 2. Collaborative Filtering
 
-+ Kelebihan:
+Pendekatan Collaborative Filtering menggunakan Neural Network untuk memprediksi rating smartphone berdasarkan pola preferensi pengguna dan item similarity. Model ini berupaya mempelajari representasi (embedding) implisit untuk pengguna dan item dari data rating yang ada.
 
-  + Dapat memberikan rekomendasi yang beragam dan mengejutkan
-  + Menangkap pola preferensi yang kompleks
-  + Memanfaatkan wisdom of crowds
-  + Adaptif terhadap perubahan preferensi
++ Arsitektur Model Deep Learning:
+  
+Model ini dirancang dengan arsitektur neural network untuk memprediksi rating pengguna, mengikuti paradigma Neural Collaborative Filtering (NCF). Arsitektur model terdiri dari:
 
-+ Kekurangan:
+  + Input Layer: Model menerima dua input terpisah: user_input (untuk ID pengguna) dan cellphone_input (untuk ID smartphone).
+  + Embedding Layer:
+    + user_embedding: Layer Embedding untuk pengguna. Dimensi input adalah num_users (jumlah pengguna unik) dan embedding_size adalah 50. Layer ini mengubah ID pengguna integer menjadi vektor dens berukuran 50 dimensi.
+    + cellphone_embedding: Layer Embedding untuk smartphone. Dimensi input adalah num_cellphones (jumlah smartphone unik) dan embedding_size adalah 50. Layer ini mengubah ID smartphone integer menjadi vektor dens berukuran 50 dimensi.
+  + Flatten Layer: Output dari setiap embedding layer diratakan (flatten) menjadi satu dimensi untuk dapat digabungkan.
+  + Concatenate Layer: Vektor embedding yang diratakan dari pengguna (user_vec) dan item (cellphone_vec) digabungkan (concatenate) menjadi satu vektor fitur gabungan.
+  + Dense Layers (Multi-Layer Perceptron):
+    + Lapisan Dense pertama dengan 128 unit (neuron) dan fungsi aktivasi ReLU (Rectified Linear Unit), yang membantu memperkenalkan non-linearitas ke dalam model.
+    + Lapisan Dropout dengan rate 0.2 diterapkan setelah lapisan dense pertama. Dropout adalah teknik regularisasi yang secara acak menonaktifkan sebagian neuron selama pelatihan, membantu mencegah overfitting.
+    + Lapisan Dense kedua dengan 64 unit dan fungsi aktivasi ReLU.
+  + Output Layer: Lapisan Dense terakhir dengan 1 unit dan fungsi aktivasi Sigmoid. Fungsi aktivasi Sigmoid digunakan karena target prediksi adalah rating yang dinormalisasi antara 0 dan 1.
+  
++ Fungsi Loss, Optimizer, dan Parameter Pelatihan:
 
-  + Cold start problem untuk pengguna baru
-  + Memerlukan data rating yang banyak
-  + Sulit untuk diinterpretasi
-  + Computational intensive
+  + Fungsi Loss: Mean Squared Error (MSE) digunakan sebagai fungsi loss. MSE mengukur rata-rata kuadrat selisih antara rating prediksi dan rating aktual, yang cocok untuk masalah regresi (prediksi nilai rating kontinu).
+  + Optimizer: Optimizer Adam digunakan untuk mengoptimalkan bobot model selama pelatihan. Adam adalah optimizer adaptif yang efisien dan sering memberikan performa baik dalam berbagai skenario deep learning. Learning rate diatur ke 0.001.
+  + Epoch: Model dilatih selama 100 epoch. Epoch adalah satu siklus lengkap pelatihan di mana seluruh dataset pelatihan dilewatkan maju dan mundur melalui jaringan saraf satu kali.
+  Batch Size: Setiap batch pelatihan berisi 64 sampel. Batch size menentukan jumlah sampel pelatihan yang akan dipropagasikan melalui jaringan sebelum parameter model diperbarui.
+  + Early Stopping: Callback EarlyStopping diimplementasikan untuk memantau val_loss (loss pada data validasi) selama pelatihan. Jika val_loss tidak menunjukkan peningkatan (berkurang) selama patience (10 epoch) berturut-turut, pelatihan akan dihentikan lebih awal. restore_best_weights=True memastikan bahwa bobot model yang memiliki val_loss terendah selama pelatihan akan digunakan. Ini membantu mencegah overfitting dan menghemat waktu komputasi.
 
-## Evaluation
++ Contoh Top-5 Recommendations
 
-###Metrik Evaluasi yang Digunakan
+![image](https://github.com/user-attachments/assets/1098face-7e51-481d-a539-8bc89b3ba627)
 
-1. Root Mean Squared Error (RMSE) - Collaborative Filtering
+Rekomendasi untuk User ID 0 menunjukkan preferensi kuat terhadap Samsung Galaxy S22 (rating 9). Contoh ini mengilustrasikan bagaimana model Collaborative Filtering dapat memprediksi preferensi pengguna berdasarkan pola rating historis, dan merekomendasikan smartphone yang kemungkinan besar akan disukai pengguna berdasarkan kesamaan preferensi dengan pengguna lain.
 
-Formula:
+3. Perbandingan Kedua Pendekatan
 
-`RMSE = √(Σ(yi - ŷi)² / n)`
++ Content-Based Filtering
+  
+  + Kelebihan:
+  
+    + Memberikan rekomendasi berdasarkan spesifikasi teknis yang jelas.
+    + Tidak memerlukan data pengguna lain (mengatasi cold start problem untuk item baru).
+    + Dapat menjelaskan alasan rekomendasi dengan jelas (misalnya, "direkomendasikan karena mirip dengan smartphone X yang Anda sukai").
+    + Konsisten dengan preferensi pengguna yang jelas.
+    
+  + Kekurangan:
+  
+    + Rekomendasi cenderung homogen (misalnya, hanya merekomendasikan smartphone dari brand dan OS yang sama).
+    + Tidak dapat menangkap preferensi yang kompleks atau serendipitous (rekomendasi tak terduga yang disukai pengguna).
+    + Terbatas pada fitur yang tersedia dalam metadata smartphone.
+    
++ Collaborative Filtering
+
+  + Kelebihan:
+  
+    + Dapat memberikan rekomendasi yang beragam dan mengejutkan (serendipitous).
+    + Mampu menangkap pola preferensi yang kompleks yang tidak selalu eksplisit dalam fitur item.
+    + Memanfaatkan wisdom of crowds (preferensi kolektif dari semua pengguna).
+    + Adaptif terhadap perubahan preferensi pengguna seiring waktu (jika data rating diperbarui).
+    
+  Kekurangan:
+  
+    + Cold start problem untuk pengguna atau smartphone baru (memerlukan data rating yang cukup).
+    + Memerlukan data rating yang banyak untuk performa optimal.
+    + Model kompleks yang membutuhkan computational resources tinggi.
+    + Sulit untuk diinterpretasi atau dijelaskan alasan di balik rekomendasinya.
+
+## Evaluasi
+
+1. Metrik Evaluasi yang Digunakan
+
+Untuk mengukur kinerja kedua pendekatan sistem rekomendasi, metrik-metrik berikut digunakan:
+
++ Root Mean Squared Error (RMSE) - Collaborative Filtering
+
+![image](https://github.com/user-attachments/assets/c536d901-02ac-49c3-b6e6-d4fde686f86c)
 
 Cara Kerja:
 
-Mengukur rata-rata kuadrat selisih antara rating aktual dan prediksi
-Memberikan penalti lebih besar pada error yang lebih besar
-Semakin rendah nilai RMSE, semakin baik performa model
+Mengukur rata-rata kuadrat selisih antara rating aktual dan prediksi. Metrik ini memberikan penalti yang lebih besar pada kesalahan prediksi yang besar. Semakin rendah nilai RMSE, semakin baik performa model dalam memprediksi rating.
 
-2. Mean Absolute Error (MAE) - Collaborative Filtering
-   
-Formula:
++ Mean Absolute Error (MAE) - Collaborative Filtering
 
-`MAE = Σ|yi - ŷi| / n`
+![image](https://github.com/user-attachments/assets/69b14c45-9421-46de-b1be-83ff07a64c15)
 
 Cara Kerja:
 
-Mengukur rata-rata absolut selisih antara rating aktual dan prediksi
-Lebih robust terhadap outlier dibanding RMSE
-Interpretasi langsung dalam skala rating (1-5)
+Mengukur rata-rata absolut selisih antara rating aktual dan prediksi. MAE lebih robust terhadap outlier dibandingkan RMSE. Nilai MAE memiliki interpretasi langsung dalam skala rating (1-5), menunjukkan rata-rata "seberapa jauh" prediksi dari nilai sebenarnya.
 
-3. Brand Diversity - Content-Based Filtering
-   
-Formula:
++ Brand Diversity - Content-Based Filtering
 
-`Brand Diversity = Unique Brands / Total Recommendations`
+![image](https://github.com/user-attachments/assets/d6a1f749-41e3-4e00-a525-376aca7e42e9)
 
 Cara Kerja:
 
-Mengukur keberagaman merek dalam rekomendasi
-Nilai 1.0 berarti semua rekomendasi dari merek berbeda
-Nilai rendah menunjukkan kurangnya variasi
+Mengukur keberagaman merek smartphone dalam daftar rekomendasi yang diberikan. Nilai 1.0 berarti semua rekomendasi berasal dari merek yang berbeda, sementara nilai rendah menunjukkan kurangnya variasi merek. Metrik ini penting untuk menghindari over-specialization pada satu merek.
 
-4. OS Diversity - Content-Based Filtering
-   
-Formula:
++ OS Diversity - Content-Based Filtering
 
-`OS Diversity = Unique OS / Total Recommendations`
+![image](https://github.com/user-attachments/assets/007a05fa-e9e0-4bbc-a338-03417ad74470)
 
 Cara Kerja:
 
-Mengukur keberagaman sistem operasi dalam rekomendasi
-Mencegah bias terhadap satu jenis OS
-Nilai tinggi menunjukkan rekomendasi yang lebih seimbang
+Mengukur keberagaman sistem operasi (misalnya, Android, iOS) dalam daftar rekomendasi. Mirip dengan Brand Diversity, metrik ini mencegah bias yang terlalu kuat terhadap satu jenis sistem operasi, memastikan rekomendasi yang lebih bervariasi.
 
-5. Average Similarity Score - Content-Based Filtering
-   
-Formula:
++ Average Similarity Score - Content-Based Filtering
 
-`Avg Similarity = Σ(similarity_scores) / n`
+![image](https://github.com/user-attachments/assets/11cd2815-43c1-4677-a4b2-32495e9b3102)
 
 Cara Kerja:
 
-Mengukur rata-rata kemiripan konten dalam rekomendasi
-Nilai tinggi menunjukkan relevansi konten yang baik
-Perlu diimbangi dengan diversity untuk menghindari redundansi
+Mengukur rata-rata kemiripan konten (berdasarkan Cosine Similarity) antara smartphone yang direkomendasikan. Nilai tinggi menunjukkan bahwa rekomendasi yang diberikan memiliki karakteristik konten yang sangat mirip. Metrik ini perlu diimbangi dengan metrik diversity untuk menghindari redundansi dan memastikan rekomendasi tetap relevan tetapi tidak monoton.
 
-### Hasil Evaluasi
+2. Hasil Evaluasi
 
-1. Collaborative Filtering
++ Collaborative Filtering
 
-RMSE: 3.1312 - Error prediksi rata-rata ~3.13 poin dalam skala 1-5
-MAE: 2.4619 - Simpangan rata-rata ~2.46 poin dari rating aktual
-Interpretasi: Performa moderat, masih ada ruang untuk perbaikan accuracy
+  + RMSE: 3.1312 - Error prediksi rata-rata
+  approx 3.13 poin dalam skala 1-5.
+  + MAE: 2.4619 - Simpangan rata-rata
+  approx 2.46 poin dari rating aktual.
+  + Interpretasi: Performa model Collaborative Filtering menunjukkan akurasi prediksi yang moderat. Nilai RMSE dan MAE yang relatif tinggi mengindikasikan masih ada ruang yang signifikan untuk perbaikan dalam memprediksi rating pengguna secara tepat. Ini bisa disebabkan oleh sparsity data, kurangnya data rating yang bervariasi, atau kebutuhan untuk arsitektur model yang lebih kompleks.
 
-2. Content-Based Filtering
++ Content-Based Filtering
 
-Brand Diversity: 0.3200 - 32% rekomendasi dari merek yang berbeda
-OS Diversity: 0.2800 - 28% rekomendasi dari OS yang berbeda
-Average Similarity: 0.4721 - Tingkat kemiripan konten yang memadai
+  + Brand Diversity: 0.2727 - 27.27% rekomendasi dari merek yang berbeda.
+  + OS Diversity: 0.1182 - 11.82% rekomendasi dari OS yang berbeda.
+  + Average Similarity: 0.4721 - Tingkat kemiripan konten yang memadai.
+  + Interpretasi: Sistem Content-Based Filtering berhasil dalam menemukan smartphone yang relevan secara konten, ditunjukkan oleh nilai Average Similarity yang cukup. Namun, nilai Brand Diversity (0.2727) dan OS Diversity (0.1182) yang rendah menunjukkan bahwa rekomendasi cenderung homogen, artinya sistem cenderung merekomendasikan smartphone dari merek dan sistem operasi yang sama atau sangat mirip dengan input pengguna. Hal ini adalah karakteristik umum dari Content-Based Filtering yang fokus pada kemiripan fitur.
 
-Interpretasi: Sistem menghasilkan rekomendasi relevan namun kurang beragam, cenderung fokus pada smartphone serupa.
+3. Kesimpulan Evaluasi
 
-### Kesimpulan Evaluasi
-
-Collaborative Filtering menunjukkan kemampuan prediksi yang dapat diterima namun memerlukan perbaikan untuk meningkatkan akurasi
-Content-Based Filtering efektif dalam menemukan smartphone serupa tetapi perlu peningkatan diversity
-Kombinasi kedua pendekatan (hybrid approach) dapat mengoptimalkan kelebihan masing-masing sistem
-
-
-
++ Collaborative Filtering menunjukkan kemampuan prediksi yang dapat diterima namun memerlukan perbaikan untuk meningkatkan akurasi. Strategi peningkatan mungkin melibatkan penggunaan dataset yang lebih besar, fine-tuning hyperparameter model, atau eksplorasi arsitektur neural network yang lebih canggih.
++ Content-Based Filtering efektif dalam menemukan smartphone serupa berdasarkan karakteristiknya, tetapi perlu peningkatan diversity dalam rekomendasinya. Untuk mengatasi homogenitas, pendekatan hybrid atau strategi diversifikasi pasca-pemrosesan dapat dipertimbangkan.
++ Kombinasi kedua pendekatan (hybrid approach) di masa depan dapat mengoptimalkan kelebihan masing-masing sistem, menyediakan rekomendasi yang tidak hanya relevan tetapi juga beragam, sehingga meningkatkan pengalaman pengguna secara keseluruhan.
