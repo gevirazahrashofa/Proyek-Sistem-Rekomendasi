@@ -399,23 +399,18 @@ Kinerja kedua model rekomendasi dinilai menggunakan metrik yang relevan.
 
 + Hasil Evaluasi:
   
-    + Presisi: 0.1500
-    + Recall: 0.0500
-    + F1-Score: 0.0750
-    + Skor Keberagaman: 0.0400
-    + Cakupan Katalog: 0.1212 (4 item unik direkomendasikan dari 33 total)
- 
-      Model berbasis konten menunjukkan presisi dan recall yang rendah, menunjukkan bahwa rekomendasinya, meskipun sangat mirip dalam fitur, mungkin tidak selalu selaras dengan apa yang dianggap "relevan" oleh pengguna berdasarkan preferensi yang lebih luas. Skor keberagaman juga sangat rendah, yang diharapkan untuk model berbasis konten yang cenderung merekomendasikan item yang sangat mirip. Cakupan katalog yang rendah menunjukkan bahwa model hanya memanfaatkan sebagian kecil dari katalog item yang tersedia untuk rekomendasi.
+    + Precision: 0.2200
+    + Recall: 0.1876
+    + F1-Score: 0.2025
+    + Diversity Score: 0.1200
   
 + Statistik Kesamaan:
 
-    + Rata-rata (Mean): 0.0460
-    + Std: 0.1068
+    + Rata-rata (Mean): 0.2041
+    + Std: 0.3031
     + Min: 0.0000
-    + Max: 0.8139
-    + Median: 0.0000
-
-Distribusi kesamaan menunjukkan bahwa sebagian besar pasangan item memiliki kesamaan yang sangat rendah, dengan beberapa pasangan (seperti seri Motorola Moto G) menunjukkan kesamaan yang tinggi, mengkonfirmasi kecenderungan model untuk mengelompokkan item yang sangat mirip.
+    + Max: 1.0000
+    + Median: 0.1352
 
 2. Evaluasi Collaborative Filtering
 
@@ -430,14 +425,12 @@ Distribusi kesamaan menunjukkan bahwa sebagian besar pasangan item memiliki kesa
       
 + Evaluasi Hasil:
 
-    + RMSE: 0.7932
-    + MAE: 0.6559
-    + MSE: 0.6292
-    + Precision@5: 0.3667
-    + Recall@5: 0.2000
-    + F1-Score@5: 0.2581
-
-      Model collaborative filtering (NCF) mencapai nilai RMSE dan MAE yang lebih rendah, menunjukkan akurasi yang lebih baik dalam memprediksi penilaian pengguna dibandingkan dengan baseline acak. Precision@5, Recall@5, dan F1-Score@5 secara signifikan lebih tinggi daripada model berbasis konten, menunjukkan bahwa model NCF lebih efektif dalam merekomendasikan item yang relevan dalam K rekomendasi teratas.
+    + RMSE: 2.0059
+    + MAE: 1.4614
+    + MSE: 4.0237
+    + Precision@5: 0.0571
+    + Recall@5: 0.0952
+    + F1-Score@5: 0.0714
 
 + Plot Riwayat Pelatihan:
 
