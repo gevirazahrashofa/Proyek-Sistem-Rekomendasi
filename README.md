@@ -322,18 +322,6 @@ Proyek ini mengimplementasikan dua pendekatan sistem rekomendasi yang berbeda: C
       
     + Generasi Rekomendasi: Diberikan phone_id, sistem mengidentifikasi indeksnya dalam matriks kesamaan, mengambil skor kesamaan dengan semua ponsel lain, mengurutkannya dalam urutan menurun, dan mengembalikan N ponsel paling mirip (tidak termasuk dirinya sendiri).
 
-+ Top-N Recommendation Example:
-
-Ketika meminta rekomendasi untuk "Motorola Moto G (2022)" (ID: 0), sistem menghasilkan 5 rekomendasi teratas berikut:
-
-    + Motorola Moto G Power (2022) (OS: Android) - Skor: 0.814
-    + Motorola Moto G Stylus (2022) (OS: Android) - Skor: 0.608
-    + Samsung Galaxy S22 (OS: Android) - Skor: 0.176
-    + Samsung Galaxy S22 Ultra (OS: Android) - Skor: 0.170
-    + Samsung Galaxy Z Fold4 (OS: Android) - Skor: 0.147
-    
-Output ini dengan jelas menunjukkan bahwa ponsel dari merek yang sama (Motorola) dan seri yang mirip (Moto G) menerima skor kesamaan tertinggi, menunjukkan kemiripan berbasis konten yang kuat.
-
 + Kelebihan:
   
     + Tidak Ada Cold-Start untuk Pengguna Baru: Dapat merekomendasikan item kepada pengguna baru asalkan ada informasi tentang item itu sendiri.
