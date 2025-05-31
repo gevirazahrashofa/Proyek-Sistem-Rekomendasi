@@ -344,9 +344,10 @@ Proyek ini mengimplementasikan dua pendekatan sistem rekomendasi yang berbeda: C
       + Konkatenasi: Vektor embedding pengguna dan item yang diratakan kemudian digabungkan (layers.concatenate) menjadi satu vektor fitur.
       + Hidden Layers: Beberapa lapisan dense ditambahkan untuk mempelajari interaksi kompleks antara pengguna dan item.
         + Lapisan Dense pertama memiliki 128 unit dan aktivasi ReLU (activation='relu').
-        + Lapisan Dropout dengan rate 0.5 diterapkan setelah lapisan pertama untuk mencegah overfitting.
+        + Lapisan Dropout dengan rate 0.2 diterapkan setelah lapisan pertama untuk mencegah overfitting.
         + Lapisan Dense kedua memiliki 64 unit dan aktivasi ReLU (activation='relu').
         + Lapisan Dropout dengan rate 0.5 diterapkan setelah lapisan kedua.
+        + Lapisan Dense ketiga memiliki 32 unit dan aktivasi ReLU (activation='relu').
       + Output Layer: Lapisan dense terakhir memiliki 1 unit dengan aktivasi linear (activation='linear') untuk memprediksi nilai penilaian.
         
     + Kompilasi Model: Model dikompilasi dengan:
@@ -357,9 +358,9 @@ Proyek ini mengimplementasikan dua pendekatan sistem rekomendasi yang berbeda: C
         
     + Pelatihan Model: Model dilatih menggunakan data pelatihan dengan parameter:
  
-      + Jumlah Epoch: 20
-      + Batch Size: 64
-      + Early Stopping: Sebuah callback EarlyStopping digunakan untuk memantau loss validasi (val_loss) dan menghentikan pelatihan jika loss tidak membaik selama 3 epoch berturut-turut (patience=3). Ini mencegah overfitting dan menghemat waktu komputasi.
+      + Jumlah Epoch: 30
+      + Batch Size: 128
+      + Early Stopping: Sebuah callback EarlyStopping digunakan untuk memantau loss validasi (val_loss) dan menghentikan pelatihan jika loss tidak membaik selama 3 epoch berturut-turut (patience=5). Ini mencegah overfitting dan menghemat waktu komputasi.
 
 + Kelebihan:
   
@@ -391,6 +392,7 @@ Kinerja kedua model rekomendasi dinilai menggunakan metrik yang relevan.
     + Recall: 0.1876
     + F1-Score: 0.2025
     + Diversity Score: 0.1200
+    + Coverage: 0.8182
   
 + Statistik Kesamaan:
 
