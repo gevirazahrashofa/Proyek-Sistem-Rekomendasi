@@ -335,33 +335,31 @@ Proyek ini mengimplementasikan dua pendekatan sistem rekomendasi yang berbeda: C
       
 2. Collaborative Filtering
 
-+ Pendekatan:
+ + Pendekatan:
 
     + Arsitektur Model Jaringan Saraf (NCF): Sebuah model Neural Collaborative Filtering dibangun menggunakan TensorFlow/Keras.
-      
       + Embedding Layers: Lapisan embedding terpisah dibuat untuk pengguna dan item. Ukuran embedding adalah 50 dimensi untuk pengguna dan 50 dimensi untuk item. Lapisan ini mengubah ID pengguna dan item yang sparse menjadi vektor representasi dense yang dapat menangkap pola hubungan.
       + Perataan (Flatten): Vektor embedding dari pengguna dan item diratakan menggunakan layers.Flatten().
-      + Konkatenasi: Vektor embedding pengguna dan item yang diratakan kemudian digabungkan (layers.concatenate) menjadi satu vektor fitur.
+      +Konkatenasi: Vektor embedding pengguna dan item yang diratakan kemudian digabungkan (layers.concatenate) menjadi satu vektor fitur.
       + Hidden Layers: Beberapa lapisan dense ditambahkan untuk mempelajari interaksi kompleks antara pengguna dan item.
         + Lapisan Dense pertama memiliki 128 unit dan aktivasi ReLU (activation='relu').
-        + Lapisan Dropout dengan rate 0.2 diterapkan setelah lapisan pertama untuk mencegah overfitting.
+        + Lapisan Dropout dengan rate 0.2 diterapkan setelah lapisan ini untuk mencegah overfitting.
         + Lapisan Dense kedua memiliki 64 unit dan aktivasi ReLU (activation='relu').
-        + Lapisan Dropout dengan rate 0.5 diterapkan setelah lapisan kedua.
+        + Lapisan Dropout dengan rate 0.2 diterapkan setelah lapisan ini untuk mencegah overfitting.
         + Lapisan Dense ketiga memiliki 32 unit dan aktivasi ReLU (activation='relu').
+        + Lapisan Dropout dengan rate 0.2 diterapkan setelah lapisan ini untuk mencegah overfitting.
       + Output Layer: Lapisan dense terakhir memiliki 1 unit dengan aktivasi linear (activation='linear') untuk memprediksi nilai penilaian.
-        
-    + Kompilasi Model: Model dikompilasi dengan:
- 
-      + Fungsi Loss: Mean Squared Error (MSE), yang mengukur rata-rata kuadrat selisih antara nilai prediksi dan aktual.
-      + Optimizer: Adam, sebuah algoritma optimasi adaptif yang efisien.
-      + Metrik: Mean Absolute Error (MAE), yang mengukur rata-rata selisih absolut antara nilai prediksi dan aktual, memberikan metrik yang lebih mudah diinterpretasikan dibandingkan MSE.
-        
-    + Pelatihan Model: Model dilatih menggunakan data pelatihan dengan parameter:
- 
-      + Jumlah Epoch: 30
-      + Batch Size: 128
-      + Early Stopping: Sebuah callback EarlyStopping digunakan untuk memantau loss validasi (val_loss) dan menghentikan pelatihan jika loss tidak membaik selama 3 epoch berturut-turut (patience=5). Ini mencegah overfitting dan menghemat waktu komputasi.
 
+    + Kompilasi Model: Model dikompilasi dengan:
+      + Fungsi Loss: Mean Squared Error (MSE), yang mengukur rata-rata kuadrat selisih antara nilai prediksi dan aktual.
+      + Optimizer: Adam (dengan learning rate 0.001), sebuah algoritma optimasi adaptif yang efisien.
+      + Metrik: Mean Absolute Error (MAE), yang mengukur rata-rata selisih absolut antara nilai prediksi dan aktual, memberikan metrik yang lebih mudah diinterpretasikan dibandingkan MSE.
+
+      + Pelatihan Model: Model dilatih menggunakan data pelatihan dengan parameter:
+        + Jumlah Epoch: 30
+        + Batch Size: 128
+        + Early Stopping: Sebuah callback EarlyStopping digunakan untuk memantau loss validasi (val_loss) dan menghentikan pelatihan jika loss tidak membaik selama 5 epoch berturut-turut (patience=5). Ini mencegah overfitting dan menghemat waktu komputasi dengan mengembalikan bobot terbaik model.
+          
 + Kelebihan:
   
     + Serendipitas: Dapat menemukan item baru yang mungkin disukai pengguna meskipun mereka tidak berbagi kesamaan fitur yang jelas dengan item yang disukai sebelumnya, dengan memanfaatkan preferensi pengguna yang serupa.
